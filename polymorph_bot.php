@@ -26,7 +26,7 @@ define( 'POLYMORPH_BOT_VERSION', '1.0.0' );
 function run_polymorph_bot() {
 
 	require_once plugin_dir_path( __FILE__ ) . 'src/class-polymorph-bot.php';
-	return Polymorph_Bot::get_instance();
+	return Polymorph_Bot\Polymorph_Bot::get_instance();
 }
 
 $GLOBALS['polymorph_bot'] = run_polymorph_bot();
