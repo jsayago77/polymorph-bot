@@ -1,9 +1,11 @@
 <?php
 
-class Chatbot
+namespace Polymorph_Bot;
+
+class PostType_Chatbot
 {
 
-    private function __construct()
+    public function __construct()
     {
         add_action('init', [$this, 'create_Chatbot'], 5);
         add_action('admin_init', [$this, 'add_chatbot_meta']);
@@ -16,8 +18,8 @@ class Chatbot
             'Chatbot',
             array(
                 'labels' => array(
-                    'chatbot' => 'Chatbot',
-                    'singular_chatbot' => 'Chatbot',
+                    'name' => 'Chatbot',
+                    'singular_name' => 'Chatbot',
                     'add_new' => 'Add New',
                     'add_new_item' => 'Add New Chatbot',
                     'edit' => 'Edit',
@@ -31,6 +33,9 @@ class Chatbot
                     'parent' => 'Parent Chatbot'
                 ),
                 'public' => true,
+                'publicly_queryable' => false,
+                'show_ui' => true,
+                'show_in_menu' => true,
                 'rewrite' => array('slug' => 'Chatbot'),
                 'menu_position' => 20,
                 'supports' => array(
@@ -39,7 +44,7 @@ class Chatbot
                     'author',
                     'thumbnail'
                 ),
-                'show_in_rest' => true,
+                'show_in_rest' => false,
                 'has_archive' => true,
                 'taxonomies' => array(''),
                 'exclude_from_search' => true
@@ -70,18 +75,12 @@ class Chatbot
         }, $_POST['polybot_avatar']);
         //------------------------BOT OPTIONS
 
-        /* Get the meta key. \*/
+        /* Get the meta key. */
         $meta_keys = array(
             'polybot_agent' => $agent,
             'polybot_color' => $color,
             'polybot_ui' => $ui,
-            'polybot_avatar' => array(
-                'default' => '',
-                'writing' => '',
-                'userWriting' => '',
-                'userSend' => '',
-                'defaultHide' => ''
-            )
+            'polybot_avatar' => $avatar
         );
 
         foreach ($meta_keys as $meta_key => $new_meta_value) {
@@ -104,44 +103,63 @@ class Chatbot
 
     public function add_chatbot_meta()
     {
-        add_meta_box('chatbot_basic_meta', 'Chatbot Config', [$this, 'config_meta_box'], 'Chatbot', 'normal');
+        add_meta_box('chatbot_basic_meta', 'Polymorph Bot Config', [$this, 'config_meta_box'], 'Chatbot', 'normal');
     }
 
     public function config_meta_box($post)
     {
-        $select_value = get_post_meta($post->ID, 'mi_select', true);
-        $color_value = get_post_meta($post->ID, 'mi_color', true);
-        $radio_value = get_post_meta($post->ID, 'mi_radio', true);
-        $imagenes = get_post_meta($post->ID, 'mi_imagenes', true);
-        // Nonce para verificación
+        wp_enqueue_media();
+        wp_enqueue_script('polybot-media-upload', Polymorph_Bot::$plugin_url . 'assets/js/admin.js', array('jquery'), null, true);
+
+        $available_agents = ['OpenAI', 'Botpress'];
+        $action_images = ['default', 'writing', 'userWriting', 'userSend', 'error'];
+
+        $agent = get_post_meta($post->ID, 'polybot_agent', true);
+        $color = get_post_meta($post->ID, 'polybot_color', true);
+        $ui = get_post_meta($post->ID, 'polybot_ui', true);
+        $avatar = get_post_meta($post->ID, 'polybot_avatar', true);
+
         wp_nonce_field('polybot_bot_edit', 'polybot_bot_nonce');
     ?>
-        <label for="mi_select">Selecciona una opción:</label>
-        <select id="mi_select" name="mi_select">
-            <option value="opcion1" <?php selected($select_value, 'opcion1'); ?>>Opción 1</option>
-            <option value="opcion2" <?php selected($select_value, 'opcion2'); ?>>Opción 2</option>
-            <option value="opcion3" <?php selected($select_value, 'opcion3'); ?>>Opción 3</option>
+        <label for="polybot-select-agent"><b>Selecciona una agente:</b></label>
+        <select id="polybot-select-agent" name="polybot_agent">
+            <?php foreach($available_agents as $av_agent): ?>
+                <option value="<?php echo $av_agent; ?>" <?php selected($agent, $av_agent); ?>><?php echo $av_agent; ?></option>
+            <?php endforeach; ?>
         </select><br><br>
 
-        <label for="mi_color">Selecciona un color:</label>
-        <input type="color" id="mi_color" name="mi_color" value="<?php echo esc_attr($color_value); ?>"><br><br>
+        <label for="polybot-select-color"><b>Selecciona el color:</b></label>
+        <input type="color" id="polybot-select-color" name="polybot_color" value="<?php echo esc_attr($color); ?>"><br><br>
 
-        <label>Selecciona una imagen:</label><br>
-        <input type="radio" id="radio1" name="mi_radio" value="imagen1" <?php checked($radio_value, 'imagen1'); ?>>
-        <label for="radio1"><img src="<?php echo get_template_directory_uri(); ?>/imagenes/imagen1.jpg" alt="Imagen 1" style="width:100px;"></label><br>
-        <input type="radio" id="radio2" name="mi_radio" value="imagen2" <?php checked($radio_value, 'imagen2'); ?>>
-        <label for="radio2"><img src="<?php echo get_template_directory_uri(); ?>/imagenes/imagen2.jpg" alt="Imagen 2" style="width:100px;"></label><br><br>
+        <label><b>Selecciona un tipo de UI:</b></label><br>
+        <input type="radio" id="polybot-ui-1" name="polybot_ui" value="bubble" <?php checked($ui, 'bubble'); ?>>
+        <label for="polybot-ui-1">Bubble</label><br>
+        <input type="radio" id="polybot-ui-2" name="polybot_ui" value="horizontal" <?php checked($ui, 'horizontal'); ?>>
+        <label for="polybot-ui-2">Horizontal</label><br>
+        <input type="radio" id="polybot-ui-3" name="polybot_ui" value="animation" <?php checked($ui, 'animation'); ?>>
+        <label for="polybot-ui-3">Animation</label><br><br>
 
-        <label>Subir hasta 5 imágenes:</label><br>
-        <button id="subir_imagenes" class="button">Subir Imágenes</button><br>
-        <div id="imagenes_preview">
-            <?php if ($imagenes) : ?>
-                <?php foreach ($imagenes as $imagen) : ?>
-                    <img src="<?php echo esc_url($imagen); ?>" style="width:100px; margin:5px;">
-                <?php endforeach; ?>
-            <?php endif; ?>
+        <label><b>Sube las animaciones del bot:</b></label><br>
+        <div class="polybot-image" style="display: flex; justify-content: space-around; flex-direction: row;">  
+            <?php
+            foreach($action_images as $image):
+                if(is_array($avatar) && !empty($avatar)) $imagen_url = wp_get_attachment_url($avatar[$image]);
+            ?>
+            <div class="polybot-image-upload">
+                <label for="polybot-image-<?php echo $image; ?>"><?php echo ucfirst($image); ?></label>
+                <input type="hidden" id="polybot-image-<?php echo $image; ?>" name="polybot_avatar[<?php echo $image; ?>]" value="<?php echo is_array($avatar) && !empty($avatar) ? esc_attr($avatar[$image]) : ''; ?>" />
+                <div id="polybot-preview-<?php echo $image; ?>" style="margin: 10px 0;">
+                    <?php if ($imagen_url) : ?>
+                        <img src="<?php echo esc_url($imagen_url); ?>" style="max-width: 100px; height: auto;" />
+                    <?php endif; ?>
+                </div>
+                <div>
+                    <input type="button" class="button button-secondary" id="polybot-upload-<?php echo $image; ?>" value="Subir Imagen" />
+                    <input type="button" class="button button-secondary" id="polybot-remove-<?php echo $image; ?>" value="Eliminar Imagen" style="<?php echo empty($avatar) ? 'display:none;' : ''; ?>" />
+                </div>
+            </div>
+            <?php endforeach; ?>
         </div>
-        <input type="hidden" id="mi_imagenes" name="mi_imagenes" value="<?php echo esc_attr(json_encode($imagenes)); ?>">
     <?php
     }
 }

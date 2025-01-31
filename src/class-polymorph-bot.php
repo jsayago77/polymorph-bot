@@ -1,5 +1,8 @@
 <?php
 
+namespace Polymorph_Bot;
+use Polymorph_Bot\PostType_Chatbot;
+
 class Polymorph_Bot
 {
 
@@ -22,6 +25,8 @@ class Polymorph_Bot
         $this->set_enviroment();
         $this->set_autoload();
         $this->init_hooks();
+
+        $chatbot = new PostType_Chatbot();
     }
 
     public function init_hooks()
@@ -58,6 +63,7 @@ class Polymorph_Bot
 
         $file_name = array_pop($parts) . '.php';
         $file_name = strtolower($file_name);
+        $file_name = str_replace('_', '-', $file_name);
 
         $parts = array_map(
             function ($part) {
@@ -67,13 +73,14 @@ class Polymorph_Bot
         );
         
         $directories = array(
-            self::$plugin_path . 'src/',
-            self::$plugin_path . 'includes/'
+            'admin',
+            'classes',
+            'posttypes'
         );
 
         foreach ($directories as $directory) {
-            $file_path_a = self::$plugin_path . implode('/', $parts) . '/' . $file_name;
-            
+            $file_path_a = self::$plugin_path . 'src/' . implode('/', $parts) . $directory . '/' . $file_name;
+
             if (\file_exists($file_path_a)) {
                 require_once($file_path_a);
                 return;
