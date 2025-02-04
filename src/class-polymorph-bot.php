@@ -2,6 +2,7 @@
 
 namespace Polymorph_Bot;
 use Polymorph_Bot\PostType_Chatbot;
+use Polymorph_Bot\PublicBot;
 
 class Polymorph_Bot
 {
@@ -27,6 +28,7 @@ class Polymorph_Bot
         $this->init_hooks();
 
         $chatbot = new PostType_Chatbot();
+        $public = new PublicBot();
     }
 
     public function init_hooks()
@@ -74,6 +76,7 @@ class Polymorph_Bot
         
         $directories = array(
             'admin',
+            'public',
             'classes',
             'posttypes'
         );

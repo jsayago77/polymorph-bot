@@ -15,7 +15,7 @@ class PostType_Chatbot
     public function create_Chatbot()
     {
         register_post_type(
-            'Chatbot',
+            'polybot-chatbot',
             array(
                 'labels' => array(
                     'name' => 'Chatbot',
@@ -67,20 +67,27 @@ class PostType_Chatbot
 
         //------------------------BOT OPTIONS
         $agent = sanitize_text_field($_POST['polybot_agent']);
+        $assist = sanitize_text_field($_POST['polybot_assistant']);
         $color = sanitize_text_field($_POST['polybot_color']);
         $ui = sanitize_text_field($_POST['polybot_ui']);
 
         $avatar = array_map(function ($value) {
             return sanitize_text_field($value);
         }, $_POST['polybot_avatar']);
+
+        $selected_pages = array_map(function ($value) {
+            return sanitize_text_field($value);
+        }, $_POST['polybot_pages']);
         //------------------------BOT OPTIONS
 
         /* Get the meta key. */
         $meta_keys = array(
             'polybot_agent' => $agent,
+            'polybot_assistant' => $assist,
             'polybot_color' => $color,
             'polybot_ui' => $ui,
-            'polybot_avatar' => $avatar
+            'polybot_avatar' => $avatar,
+            'polybot_pages' => $selected_pages
         );
 
         foreach ($meta_keys as $meta_key => $new_meta_value) {
@@ -103,7 +110,7 @@ class PostType_Chatbot
 
     public function add_chatbot_meta()
     {
-        add_meta_box('chatbot_basic_meta', 'Polymorph Bot Config', [$this, 'config_meta_box'], 'Chatbot', 'normal');
+        add_meta_box('chatbot_basic_meta', 'Polymorph Bot Config', [$this, 'config_meta_box'], 'polybot-chatbot', 'normal');
     }
 
     public function config_meta_box($post)
@@ -115,10 +122,14 @@ class PostType_Chatbot
         $action_images = ['default', 'writing', 'userWriting', 'userSend', 'error'];
 
         $agent = get_post_meta($post->ID, 'polybot_agent', true);
+        $assist = get_post_meta($post->ID, 'polybot_assistant', true);
         $color = get_post_meta($post->ID, 'polybot_color', true);
         $ui = get_post_meta($post->ID, 'polybot_ui', true);
         $avatar = get_post_meta($post->ID, 'polybot_avatar', true);
+        $selected_pages = get_post_meta($post->ID, 'polybot_pages', true);
 
+        $pages = get_pages(['ID','post_title', 'post_name']);
+        
         wp_nonce_field('polybot_bot_edit', 'polybot_bot_nonce');
     ?>
         <label for="polybot-select-agent"><b>Selecciona una agente:</b></label>
@@ -127,6 +138,9 @@ class PostType_Chatbot
                 <option value="<?php echo $av_agent; ?>" <?php selected($agent, $av_agent); ?>><?php echo $av_agent; ?></option>
             <?php endforeach; ?>
         </select><br><br>
+
+        <label for="polybot-assistant"><b>Ingresa el ID del asistente:</b></label>
+        <input type="text" id="polybot-assistant" name="polybot_assistant" value="<?php echo esc_attr($assist); ?>"><br><br>
 
         <label for="polybot-select-color"><b>Selecciona el color:</b></label>
         <input type="color" id="polybot-select-color" name="polybot_color" value="<?php echo esc_attr($color); ?>"><br><br>
@@ -138,6 +152,20 @@ class PostType_Chatbot
         <label for="polybot-ui-2">Horizontal</label><br>
         <input type="radio" id="polybot-ui-3" name="polybot_ui" value="animation" <?php checked($ui, 'animation'); ?>>
         <label for="polybot-ui-3">Animation</label><br><br>
+
+        <label><b>Selecciona las paginas en donde aparecera el bot:</b></label><br>
+        <div>
+        <div style="display: inline-block; margin: .2em;">
+            <input type="checkbox" id="polybot_page_all" name="polybot_pages[]" value="all" <?php checked($selected_pages[0], 'all'); ?>>
+            <label for="polybot_page_all">Todas las paginas</label>
+        </div>
+        <?php foreach($pages as $page): ?>
+            <div style="display: inline-block; margin: .2em;">
+                <input type="checkbox" id="polybot_page_<?php echo esc_attr($page->ID); ?>" name="polybot_pages[]" value="<?php echo esc_attr($page->post_name); ?>" <?php checked($selected_pages, $page->post_name); ?>>
+                <label for="polybot_page_<?php echo esc_attr($page->ID); ?>"><?php echo esc_attr($page->post_title); ?></label>
+            </div>
+        <?php endforeach; ?>
+        </div><br><br>
 
         <label><b>Sube las animaciones del bot:</b></label><br>
         <div class="polybot-image" style="display: flex; justify-content: space-around; flex-direction: row;">  
