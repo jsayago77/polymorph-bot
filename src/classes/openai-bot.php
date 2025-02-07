@@ -1,6 +1,6 @@
 <?php
 
-class OpenAIBot
+class OpenAI_Bot
 {
     private $apiKey;
     private $assistantId;
