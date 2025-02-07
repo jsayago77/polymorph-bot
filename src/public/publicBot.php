@@ -18,7 +18,7 @@ class PublicBot {
 
         wp_enqueue_style('polybot-fa-icons', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css', array(), null, 'all');
         wp_enqueue_style('polybot-tailwind', Polymorph_Bot::$plugin_url . 'assets/css/output.css', array(), null, 'all');
-        wp_enqueue_style('polybot', Polymorph_Bot::$plugin_url . 'assets/css/tupi.css', array(), null, 'all');
+        wp_enqueue_style('polybot', Polymorph_Bot::$plugin_url . 'assets/css/styles.css', array(), null, 'all');
         wp_enqueue_script('polybot-chatbot', Polymorph_Bot::$plugin_url . 'assets/build/index.js', $asset['dependencies'], $asset['version'], true);
 
     }

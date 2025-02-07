@@ -1,0 +1,28 @@
+.poly-input:focus {
+    outline: none;
+}
+
+.markdown-container p {
+    margin-bottom: 0;
+}
+
+.option-button {
+    background-color: transparent;
+    border-radius: 15%;
+    padding: 0.3rem .7rem;
+}
+
+.option-button:hover {
+    color: #e6e6e6;
+    background-color: #e7e7e737;
+}
+
+.send-button {
+    background-color: #fff;
+    color: #949596;
+}
+
+.send-button:hover {
+    color: #676767;
+    background-color: #e1e1e1;
+}

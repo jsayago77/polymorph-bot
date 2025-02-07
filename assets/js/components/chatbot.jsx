@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Comment } from 'react-loader-spinner';
 import MarkdownRenderer from './mkdRenderer';
 
-import CloseIcon from '../../img/xmark-solid.svg';
-
 const hiBot = polybotObj.avatar.default;
 const shokedBot = polybotObj.avatar.userSend;
 const errorBot = polybotObj.avatar.error;
