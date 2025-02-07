@@ -75,12 +75,12 @@ const Chatbot = ({ handleClose }) => {
             setLoading(true);
             setBotState(writingBot);
             try {
-                const response = await fetch(ubiChatObj.chatApiUrl, {
+                const response = await fetch(polybotObj.messageUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ message: send_message, thread_id: thread })
+                    body: JSON.stringify({ bot_id: polybotObj.botID, message: send_message, thread_id: thread })
                 });
 
                 if (response.ok) {
@@ -119,7 +119,10 @@ const Chatbot = ({ handleClose }) => {
         const userMessages = messages.filter(message => message.sender === 'user');
 
         return messages.map((message) => (
-            <div key={message.id} className={`message ${message.sender}`}>
+            <div 
+                key={message.id} 
+                className={`my-2 p-2 rounded-md text-white font-semibold w-40 mb-0 ${message.sender === 'user' ? 'bg-blue-400 justify-self-end' : 'justify-self-start'}`}
+                style={message.sender !== 'user' ? { backgroundColor: polybotObj.color } : {}}>
                 <MarkdownRenderer markdown={message.text} />
             </div>
         ));
@@ -129,13 +132,22 @@ const Chatbot = ({ handleClose }) => {
         <>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
             <div className="flex flex-col bg-white rounded-lg shadow-lg w-96 h-[500px]">
-                <div className="bg-blue-500 text-white p-4 rounded-t-lg flex">
-                    <div className='w-17 h-17 bg-white m-4 rounded-full'>
-                        <img src={botState}/>
+                <div className="text-white rounded-t-lg flex justify-between" style={{ backgroundColor: polybotObj.color}}>
+                    <div className='w-17 bg-white m-4 rounded-full'>
+                        <img style={{ marginLeft: '0' }} src={botState} />
                     </div>
-                    <div className='text-lg font-semibold'>{polybotObj.name}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'end', padding: '.5em' }}>
-                        <img src={CloseIcon} style={{ width: '7%' }} onClick={() => handleClose()} />
+                    <div className='flex items-center text-lg font-semibold w-40'>{polybotObj.name}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'end', padding: '1em' }}>
+                        <button
+                            type="button"
+                            onClick={() => handleCleanMessages()}
+                            className="option-button"
+                        >
+                            <i className="fa-solid fa-broom"></i>
+                        </button>
+                        <button type="button" onClick={() => handleClose()} className="option-button">
+                            <i class="fa-solid fa-xmark fa-xl"></i>
+                        </button>
                     </div>
                 </div>
                 <div className="flex-1 p-4 overflow-y-auto space-y-2" ref={messagesEndRef}>
@@ -152,22 +164,22 @@ const Chatbot = ({ handleClose }) => {
                                 </div> */}
                         </div>
                     )}
-                    <div className="chatbot-chat">
+                    <div className="flex-1 p-4 overflow-y-auto space-y-2">
                         {renderMessages()}
                         {loading && (
-                            <>
+                            <div>
                                 <Comment
                                     key={-1}
                                     visible={loading}
                                     height="40"
                                     width="50"
                                     ariaLabel="comment-loading"
-                                    wrapperStyle={{ margin: "0", padding: "0" }}
-                                    wrapperClass="message assistant"
+                                    wrapperStyle={{ margin: "0", padding: "0", backgroundColor: polybotObj.color }}
+                                    wrapperClass="m-2 p-2 rounded-md text-white font-semibold w-fit"
                                     color="#ffffff"
-                                    backgroundColor="#76bd1d"
+                                    backgroundColor={polybotObj.color}
                                 />
-                            </>
+                            </div>
                         )}
                     </div>
                     {/* { limit == 5 && (
@@ -175,16 +187,8 @@ const Chatbot = ({ handleClose }) => {
                         )} */}
                 </div>
                 <form onSubmit={handleSubmit}>
-                    <div className='p-4 border-t border-gray-200'>
+                    <div className='border-t border-gray-200'>
                         <div className='flex'>
-                            <button
-                                color="primary"
-                                type="button"
-                                onClick={() => handleCleanMessages()}
-                                className='bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
-                            >
-                                <i className="fa-solid fa-broom"></i>
-                            </button>
                             <input
                                 value={currentMessage}
                                 onChange={handleChange}
@@ -193,16 +197,17 @@ const Chatbot = ({ handleClose }) => {
                                 placeholder="Escribe tu mensaje..."
                                 type="text"
                                 disabled={false /*limit == 5 ? true : false*/}
+                                style={{ border: '0'}}
+                                className='poly-input'
                             />
                             <button
-                                color="primary"
                                 type="submit"
                                 disabled={false /*limit == 5 ? true : false*/}
                                 onMouseEnter={() => setBotState(shokedBot)}
                                 onMouseLeave={() => setBotState(hiBot)}
-                                className='bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                className='send-button'
                             >
-                                <i className="fa-solid fa-paper-plane"></i>
+                                <i className="fa-regular fa-paper-plane"></i>
                             </button>
                         </div>
                     </div>
