@@ -52,7 +52,7 @@ class PublicBot {
             'color' => get_post_meta($posts[0]->ID, 'polybot_color', true),
             'ui' => get_post_meta($posts[0]->ID, 'polybot_ui', true),
             'avatar' => $avatar,
-            'messageUrl' => rest_url('')
+            'messageUrl' => rest_url('polybot/v1/send-message')
         ));
 
         echo '<div id="polybot_chatbot"></div>';

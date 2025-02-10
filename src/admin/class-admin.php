@@ -54,7 +54,7 @@ class Admin {
         );
 
         add_settings_field(
-            'openai_key', 
+            'polybot_openai_key', 
             'OpenAI Key', 
             array($this, 'openai_key_callback'), 
             'polymorph-bot-admin', 
@@ -62,7 +62,7 @@ class Admin {
         );
 
         add_settings_field(
-            'botpress_key', 
+            'polybot_botpress_key', 
             'Botpress Key', 
             array($this, 'botpress_key_callback'), 
             'polymorph-bot-admin', 

@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import Chatbot from './chatbot';
 import { motion, AnimatePresence } from "motion/react";
 
-const BotIcon = () => {
+const BubbleIcon = () => {
   const [showIcon, setShowIcon] = useState(true);
   const [top, setTop] = useState('75%');
   const [right, setRight] = useState('-5%');
@@ -40,4 +40,4 @@ const BotIcon = () => {
   );
 };
 
-export default BotIcon;
+export default BubbleIcon;
