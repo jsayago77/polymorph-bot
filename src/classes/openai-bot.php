@@ -1,5 +1,7 @@
 <?php
 
+namespace Polymorph_Bot;
+
 class OpenAI_Bot
 {
     private $apiKey;

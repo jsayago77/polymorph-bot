@@ -3,6 +3,8 @@
 namespace Polymorph_Bot;
 use Polymorph_Bot\PostType_Chatbot;
 use Polymorph_Bot\PublicBot;
+use Polymorph_Bot\Rest_Routes;
+use Polymorph_Bot\Admin;
 
 class Polymorph_Bot
 {
@@ -27,8 +29,11 @@ class Polymorph_Bot
         $this->set_autoload();
         $this->init_hooks();
 
+        $admin = new Admin();
+        $rest = new Rest_Routes();
         $chatbot = new PostType_Chatbot();
         $public = new PublicBot();
+
     }
 
     public function init_hooks()

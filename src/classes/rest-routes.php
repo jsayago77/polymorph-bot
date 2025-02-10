@@ -2,7 +2,7 @@
 
 namespace Polymorph_Bot;
 
-use OpenAI_Bot;
+use Polymorph_Bot\OpenAI_Bot;
 
 class Rest_Routes {
 
@@ -11,7 +11,7 @@ class Rest_Routes {
         add_action('rest_api_init', array($this, 'load_endpoints'));
     }
 
-    public function load_enpoints()
+    public function load_endpoints()
     {
         register_rest_route('polybot/v1', '/send-message/', array(
             'methods' => 'POST',

@@ -1,5 +1,6 @@
 import domReady from '@wordpress/dom-ready';
-import BotIcon from './components/botIcon';
+import BubbleIcon from './components/BubbleIcon';
+import VerticalIcon from './components/VerticalIcon';
 import { createRoot } from '@wordpress/element';
 import '../css/index.css';
 
@@ -8,5 +9,5 @@ domReady( () => {
         document.getElementById( 'polybot_chatbot' )
     );
 
-    shortcode_root.render( <BotIcon /> );
+    shortcode_root.render( <BubbleIcon /> );
 } );

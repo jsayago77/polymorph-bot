@@ -1,4 +1,6 @@
 <?php
+
+namespace Polymorph_Bot;
 /**
  * Class Admin
  *
@@ -82,7 +84,7 @@ class Admin {
     }
 
     public function print_section_info() {
-        print 'Enter your settings below:';
+        print 'Configura las API Key de los agentes:';
     }
 
     public function openai_key_callback() {
