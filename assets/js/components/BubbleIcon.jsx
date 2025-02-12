@@ -5,19 +5,28 @@ import { motion, AnimatePresence } from "motion/react";
 const BubbleIcon = () => {
   const [showIcon, setShowIcon] = useState(true);
   const [top, setTop] = useState('75%');
-  const [right, setRight] = useState('-5%');
+  const [right, setRight] = useState('-400px');
 
   const openChat = () => {
     setShowIcon(false);
-    setTop('15%');
-    setRight('1%');
+    if(isMobile()){
+      setTop('0%');
+      setRight('0%');
+    } else {
+      setTop('15%');
+      setRight('1%');
+    }
   }
 
   const closeChat = () => {
     setShowIcon(true);
     setTop('75%');
-    setRight('-5%')
+    setRight('-400px')
   }
+
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  };
 
   return (
     <>
@@ -25,8 +34,11 @@ const BubbleIcon = () => {
         {showIcon ?
           <motion.div
             whileHover={{ scale: 1.3 }}
+            style={{
+              width: '15%'
+            }}
           >
-            <img src={polybotObj.avatar.default} style={{ width: '40%' }} onClick={() => openChat()} />
+            <img src={polybotObj.avatar.default} style={{ marginLeft: '0' }} onClick={() => openChat()} />
           </motion.div>
           :
           <AnimatePresence>

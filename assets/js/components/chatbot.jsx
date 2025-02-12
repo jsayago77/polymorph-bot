@@ -126,10 +126,14 @@ const Chatbot = ({ handleClose }) => {
         ));
     };
 
+    const isMobile = () => {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
     return (
         <>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-            <div className="flex flex-col bg-white rounded-lg shadow-lg w-96 h-[500px]">
+            <div className="flex flex-col bg-white rounded-lg shadow-lg w-96 h-[500px] max-[400px]:w-screen max-[400px]:h-screen">
                 <div className="text-white rounded-t-lg flex justify-between" style={{ backgroundColor: polybotObj.color}}>
                     <div className='w-17 bg-white m-4 rounded-full'>
                         <img style={{ marginLeft: '0' }} src={botState} />
