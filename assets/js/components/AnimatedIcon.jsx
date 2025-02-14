@@ -9,6 +9,7 @@ const AnimatedIcon = () => {
     const intervalRef = useRef(null);
     const dragStartPos = useRef({ x: 0, y: 0 });
     const [showChat, setShowChat] = useState(false);
+    const [avatar, setAvatar] = useState(polybotObj.avatar.default);
 
     // Movimiento aleatorio
     const moveRandomly = () => {
@@ -103,7 +104,7 @@ const AnimatedIcon = () => {
             onClick={() => openChat()}
             >
                 <img
-                    src={polybotObj.avatar.default}
+                    src={avatar}
                     alt="Draggable GIF"
                     style={{ pointerEvents: 'none', marginLeft: '0'}}
                     draggable="false"
@@ -112,7 +113,7 @@ const AnimatedIcon = () => {
             {showChat &&
                 <AnimatePresence>
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }} exit={{ opacity: 0 }}>
-                        <ChatbotLite handleClose={closeChat} />
+                        <ChatbotLite handleClose={closeChat} handleAvatar={setAvatar} />
                     </motion.div>
                 </AnimatePresence>
             }

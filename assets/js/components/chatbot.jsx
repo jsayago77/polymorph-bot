@@ -25,6 +25,13 @@ const Chatbot = ({ handleClose }) => {
     const [botState, setBotState] = useState(hiBot);
 
     useEffect(() => {
+        const chatbotMessage = {
+            id: 0,
+            text: '¡Hola! ¿En qué puedo ayudarte hoy?',
+            sender: 'assistant'
+        };
+
+        setMessages([...messages, chatbotMessage]);
         if (currentMessage !== '') sendMessage();
     }, []);
 

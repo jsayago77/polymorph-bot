@@ -8,7 +8,7 @@ const errorBot = polybotObj.avatar.error;
 const writingBot = polybotObj.avatar.writing;
 const thinkBot = polybotObj.avatar.userWriting;
 
-const ChatbotLite = ({ handleClose }) => {
+const ChatbotLite = ({ handleClose, handleAvatar }) => {
     const messagesEndRef = useRef(null);
     const [messages, setMessages] = useState([]);
     const [thread, setThread] = useState('');
@@ -25,6 +25,14 @@ const ChatbotLite = ({ handleClose }) => {
     const [botState, setBotState] = useState(hiBot);
 
     useEffect(() => {
+        const chatbotMessage = {
+            id: 0,
+            text: '¡Hola! ¿En qué puedo ayudarte hoy?',
+            sender: 'assistant'
+        };
+
+        setMessages([...messages, chatbotMessage]);
+
         if (currentMessage !== '') sendMessage();
     }, []);
 
@@ -71,7 +79,7 @@ const ChatbotLite = ({ handleClose }) => {
         setMessages([...messages, newMessage]);
         if (send_message.trim() !== '') {
             setLoading(true);
-            setBotState(writingBot);
+            handleAvatar(writingBot);
             try {
                 const response = await fetch(polybotObj.messageUrl, {
                     method: 'POST',
@@ -91,11 +99,11 @@ const ChatbotLite = ({ handleClose }) => {
                     };
 
                     setThread(resp.thread);
-                    setBotState(hiBot);
+                    handleAvatar(hiBot);
                     setLoading(false);
                     setMessages([...messages, newMessage, chatbotMessage]);
                 } else {
-                    setBotState(errorBot);
+                    handleAvatar(errorBot);
                     setLoading(false);
                     setMessages([...messages, newMessage, { id: messages.length + 1, text: '¡Ha ocurrido un error! Inténtalo de nuevo.', sender: 'assistant' }]);
                     throw new Error('Error al enviar el mensaje');
@@ -187,8 +195,8 @@ const ChatbotLite = ({ handleClose }) => {
                             <input
                                 value={currentMessage}
                                 onChange={handleChange}
-                                onFocus={() => setBotState(thinkBot)}
-                                onBlur={() => setBotState(hiBot)}
+                                onFocus={() => handleAvatar(thinkBot)}
+                                onBlur={() => handleAvatar(hiBot)}
                                 placeholder="Escribe tu mensaje..."
                                 type="text"
                                 disabled={false /*limit == 5 ? true : false*/}
@@ -198,8 +206,8 @@ const ChatbotLite = ({ handleClose }) => {
                             <button
                                 type="submit"
                                 disabled={false /*limit == 5 ? true : false*/}
-                                onMouseEnter={() => setBotState(shokedBot)}
-                                onMouseLeave={() => setBotState(hiBot)}
+                                onMouseEnter={() => handleAvatar(shokedBot)}
+                                onMouseLeave={() => handleAvatar(hiBot)}
                                 className='send-button'
                             >
                                 <i className="fa-regular fa-paper-plane"></i>
