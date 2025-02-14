@@ -161,7 +161,7 @@ class PostType_Chatbot
         </div>
         <?php foreach($pages as $page): ?>
             <div style="display: inline-block; margin: .2em;">
-                <input type="checkbox" id="polybot_page_<?php echo esc_attr($page->ID); ?>" name="polybot_pages[]" value="<?php echo esc_attr($page->post_name); ?>" <?php checked($selected_pages, $page->post_name); ?>>
+                <input type="checkbox" id="polybot_page_<?php echo esc_attr($page->ID); ?>" name="polybot_pages[]" value="<?php echo esc_attr($page->post_name); ?>" <?php checked(in_array($page->post_name, $selected_pages)); ?>>
                 <label for="polybot_page_<?php echo esc_attr($page->ID); ?>"><?php echo esc_attr($page->post_title); ?></label>
             </div>
         <?php endforeach; ?>

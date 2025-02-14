@@ -13,7 +13,7 @@ class Rest_Routes {
 
     public function load_endpoints()
     {
-        register_rest_route('polybot/v1', '/send-message/', array(
+        register_rest_route('polybot/v1', '/send-message', array(
             'methods' => 'POST',
             'callback' => array($this, 'send_message'),
         ));
@@ -27,10 +27,10 @@ class Rest_Routes {
         $agent =  get_post_meta($bot_id, 'polybot_agent', true);
 
         if($agent == 'OpenAI') {
-            $key = get_option('polybot_openai_key');
+            $keys = get_option('polymorph_bot_options');
             $thread = $request->get_param('thread_id');
 
-            $bot = new OpenAI_Bot($key, $assist_id, $thread);
+            $bot = new OpenAI_Bot($keys['openai_key'], $assist_id, $thread);
 
             $message = $request->get_param('message');
             $bot_response = $bot->sendMessageGeneral($message);

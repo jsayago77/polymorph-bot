@@ -36,7 +36,7 @@ class OpenAI_Bot
     {
         $url = $this->apiUrl . "/threads/{$this->threadId}/messages";
 
-        return $this->makeRequest($url, $params);
+        return $this->makeRequest($url, $params, 'GET');
         /**
          * limit, order, after, before, run_id
          */
@@ -52,8 +52,8 @@ class OpenAI_Bot
     public function retrieveRun($runId)
     {
         $url = $this->apiUrl . "/threads/{$this->threadId}/runs/{$runId}";
-
-        return $this->makeRequest($url, null);
+		
+        return $this->makeRequest($url, null, 'GET');
     }
 
     public function threadAndRun($prompt)
@@ -73,15 +73,23 @@ class OpenAI_Bot
 
     }
 
-    private function makeRequest($url, $data)
+    private function makeRequest($url, $data, $method = 'POST')
     {
-        $ch = curl_init($url);
+        $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
+		
+		if($method == 'POST')
+        	curl_setopt($ch, CURLOPT_POST, true);
 
-        if ($data)
+        if ($method == 'POST' && !empty($data))
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
+			
+		if ($method == 'GET' && !empty($data)) {
+			$queryString = http_build_query($data);
+			$url .= '?' . $queryString;
+		}
+		
+		curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
             'Authorization: Bearer ' . $this->apiKey,
@@ -90,12 +98,19 @@ class OpenAI_Bot
 
         $response = curl_exec($ch);
         curl_close($ch);
+		
+		$decoded = json_decode($response, true);
+		if (json_last_error() !== JSON_ERROR_NONE) {
+			//error_log(print_r(array('error' => 'Invalid JSON', 'url' => $url, 'fields' => $data),true));
+		}
 
-        return json_decode($response, true);
+        return $decoded;
     }
 
     public function sendMessageGeneral($prompt)
     {
+		$runId = '';
+		$status = '';
         if($this->threadId) {
             $this->sendMessage($prompt);
             $resp = $this->createRun();
@@ -106,13 +121,15 @@ class OpenAI_Bot
             $this->threadId = $resp['thread_id'];
             $status = $resp['status'];
             $runId = $resp['id'];
+			
         }
 
         while( $status == "queued" || $status == "in-progress"){
             $run = $this->retrieveRun($runId);
 
+			$status = $run['status'];
             $runId = $run['id'];
-            sleep(0.2);
+            sleep(3);
         }
 
         /* while ($status != "completed") {
@@ -124,14 +141,14 @@ class OpenAI_Bot
         } */
 
         if($status == 'completed'){
-            $assistant_message = $this->listMessages($this->threadId, [
+            $assistant_message = $this->listMessages([
                 'order' => 'desc',
                 'limit' => 1
             ]);
 
-            if (!empty($assistant_message->data)) {
+            if (!empty($assistant_message['data'])) {
 
-                $message = $assistant_message->data[0]->content[0]->text->value ?? '';
+                $message = $assistant_message['data'][0]['content'][0]['text']['value'] ?? '';
                 $message = preg_replace("/【\d+:\d+†source】/", "", $message);
 
                 $response = [
