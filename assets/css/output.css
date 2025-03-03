@@ -580,6 +580,9 @@
       max-width: 96rem;
     }
   }
+  .m-1 {
+    margin: calc(var(--spacing) * 1);
+  }
   .m-2 {
     margin: calc(var(--spacing) * 2);
   }
@@ -631,8 +634,21 @@
   .table-row {
     display: table-row;
   }
+  .size-1 {
+    width: calc(var(--spacing) * 1);
+    height: calc(var(--spacing) * 1);
+  }
+  .h-1 {
+    height: calc(var(--spacing) * 1);
+  }
+  .h-2 {
+    height: calc(var(--spacing) * 2);
+  }
   .h-8 {
     height: calc(var(--spacing) * 8);
+  }
+  .h-10 {
+    height: calc(var(--spacing) * 10);
   }
   .h-\[300px\] {
     height: 300px;
@@ -657,6 +673,9 @@
   }
   .w-fit {
     width: fit-content;
+  }
+  .max-w-45 {
+    max-width: calc(var(--spacing) * 45);
   }
   .flex-1 {
     flex: 1;
@@ -823,10 +842,6 @@
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
-  .backdrop-filter {
-    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
-    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
-  }
   .transition {
     transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
@@ -868,73 +883,13 @@
       outline-style: none;
     }
   }
-  .max-\[400px\]\:h-\[500px\] {
-    @media (width < 400px) {
-      height: 500px;
-    }
-  }
   .max-\[400px\]\:h-screen {
     @media (width < 400px) {
       height: 100vh;
     }
   }
-  .max-\[400px\]\:w-96 {
-    @media (width < 400px) {
-      width: calc(var(--spacing) * 96);
-    }
-  }
   .max-\[400px\]\:w-screen {
     @media (width < 400px) {
-      width: 100vw;
-    }
-  }
-  .min-\[300px\]\:h-screen {
-    @media (width >= 300px) {
-      height: 100vh;
-    }
-  }
-  .min-\[300px\]\:w-screen {
-    @media (width >= 300px) {
-      width: 100vw;
-    }
-  }
-  .min-\[350px\]\:w-screen {
-    @media (width >= 350px) {
-      width: 100vw;
-    }
-  }
-  .min-\[400px\]\:h-\[500px\] {
-    @media (width >= 400px) {
-      height: 500px;
-    }
-  }
-  .min-\[400px\]\:w-96 {
-    @media (width >= 400px) {
-      width: calc(var(--spacing) * 96);
-    }
-  }
-  .min-\[400px\]\:w-screen {
-    @media (width >= 400px) {
-      width: 100vw;
-    }
-  }
-  .sm\:h-100 {
-    @media (width >= 40rem) {
-      height: calc(var(--spacing) * 100);
-    }
-  }
-  .sm\:h-screen {
-    @media (width >= 40rem) {
-      height: 100vh;
-    }
-  }
-  .sm\:w-100 {
-    @media (width >= 40rem) {
-      width: calc(var(--spacing) * 100);
-    }
-  }
-  .sm\:w-screen {
-    @media (width >= 40rem) {
       width: 100vw;
     }
   }
@@ -1102,42 +1057,6 @@
   inherits: false;
 }
 @property --tw-sepia {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-blur {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-brightness {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-contrast {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-grayscale {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-hue-rotate {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-invert {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-opacity {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-saturate {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-backdrop-sepia {
   syntax: "*";
   inherits: false;
 }

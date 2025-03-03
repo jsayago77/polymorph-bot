@@ -127,7 +127,7 @@ const ChatbotLite = ({ handleClose, handleAvatar }) => {
         return messages.map((message) => (
             <div 
                 key={message.id} 
-                className={`my-2 p-2 rounded-md font-semibold text-white text-sm w-40 mb-0 ${message.sender === 'user' ? 'bg-blue-400 justify-self-end' : 'justify-self-start'}`}
+                className={`my-2 p-2 rounded-md font-semibold text-white text-sm max-w-45 mb-0 ${message.sender === 'user' ? 'bg-blue-400 justify-self-end' : 'justify-self-start'}`}
                 style={message.sender !== 'user' ? { backgroundColor: polybotObj.color } : {}}>
                 <MarkdownRenderer markdown={message.text} />
             </div>
