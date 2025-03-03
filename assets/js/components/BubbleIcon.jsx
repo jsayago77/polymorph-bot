@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 const BubbleIcon = () => {
   const [showIcon, setShowIcon] = useState(true);
   const [top, setTop] = useState('75%');
-  const [right, setRight] = useState('-400px');
+  const [right, setRight] = useState('-370px');
 
   const openChat = () => {
     setShowIcon(false);
@@ -14,14 +14,14 @@ const BubbleIcon = () => {
       setRight('0%');
     } else {
       setTop('15%');
-      setRight('1%');
+      setRight('1.5%');
     }
   }
 
   const closeChat = () => {
     setShowIcon(true);
     setTop('75%');
-    setRight('-400px')
+    setRight('-370px')
   }
 
   const isMobile = () => {
@@ -30,12 +30,12 @@ const BubbleIcon = () => {
 
   return (
     <>
-      <div style={{ position: 'fixed', top: top, right: right, zIndex: 1000 }}>
+      <div style={{ position: 'fixed', top: top, right: right, zIndex: 'calc(infinity)' }}>
         {showIcon ?
           <motion.div
             whileHover={{ scale: 1.3 }}
             style={{
-              width: '15%'
+              width: '20%'
             }}
           >
             <img src={polybotObj.avatar.default} style={{ marginLeft: '0' }} onClick={() => openChat()} />

@@ -126,7 +126,7 @@ const Chatbot = ({ handleClose }) => {
         return messages.map((message) => (
             <div 
                 key={message.id} 
-                className={`my-2 p-2 rounded-md text-white font-semibold max-w-45 mb-0 ${message.sender === 'user' ? 'bg-blue-400 justify-self-end' : 'justify-self-start'}`}
+                className={`my-2 !p-2 rounded-md text-white font-semibold max-w-45 mb-0 ${message.sender === 'user' ? 'bg-blue-400 justify-self-end' : 'justify-self-start'}`}
                 style={message.sender !== 'user' ? { backgroundColor: polybotObj.color } : {}}>
                 <MarkdownRenderer markdown={message.text} />
             </div>
@@ -140,9 +140,9 @@ const Chatbot = ({ handleClose }) => {
     return (
         <>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-            <div className="flex flex-col bg-white rounded-lg shadow-lg w-96 h-[500px] max-[400px]:w-screen max-[400px]:h-screen">
+            <div className="polybot-chatbot flex flex-col bg-white rounded-lg shadow-lg w-96 h-[500px] max-[400px]:w-screen max-[400px]:h-screen">
                 <div className="text-white rounded-t-lg flex justify-between" style={{ backgroundColor: polybotObj.color}}>
-                    <div className='w-17 bg-white m-4 rounded-full'>
+                    <div className='w-17 bg-white !m-4 rounded-full'>
                         <img style={{ marginLeft: '0' }} src={botState} />
                     </div>
                     <div className='flex items-center text-lg font-semibold w-40'>{polybotObj.name}</div>
@@ -159,7 +159,7 @@ const Chatbot = ({ handleClose }) => {
                         </button>
                     </div>
                 </div>
-                <div className="flex-1 p-4 overflow-y-auto space-y-2" ref={messagesEndRef}>
+                <div className="flex-1 !p-4 overflow-y-auto space-y-2 message-container" ref={messagesEndRef}>
                     {!messages.length && /*limit != 5 &&*/ (
                         <div className='assistant-init'>
                             <p className='assistant-name'>¡Hola! ¿En qué puedo ayudarte hoy?</p>
@@ -173,7 +173,7 @@ const Chatbot = ({ handleClose }) => {
                                 </div> */}
                         </div>
                     )}
-                    <div className="flex-1 p-4 overflow-y-auto space-y-2">
+                    <div className="flex-1 !p-4 overflow-y-auto space-y-2">
                         {renderMessages()}
                         {loading && (
                             <div>
@@ -184,7 +184,7 @@ const Chatbot = ({ handleClose }) => {
                                     width="50"
                                     ariaLabel="comment-loading"
                                     wrapperStyle={{ margin: "0", padding: "0", backgroundColor: polybotObj.color }}
-                                    wrapperClass="m-2 p-2 rounded-md text-white font-semibold w-fit"
+                                    wrapperClass="!m-2 !p-2 rounded-md text-white font-semibold w-fit"
                                     color="#ffffff"
                                     backgroundColor={polybotObj.color}
                                 />
