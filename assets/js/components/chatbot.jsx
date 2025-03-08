@@ -140,12 +140,12 @@ const Chatbot = ({ handleClose }) => {
     return (
         <>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-            <div className="polybot-chatbot flex flex-col bg-white rounded-lg shadow-lg w-96 h-[500px] max-[400px]:w-screen max-[400px]:h-screen">
+            <div className="polybot-chatbot flex flex-col bg-white rounded-lg shadow-lg w-128 h-[500px] max-[400px]:w-screen max-[400px]:h-screen">
                 <div className="text-white rounded-t-lg flex justify-between" style={{ backgroundColor: polybotObj.color}}>
-                    <div className='w-17 bg-white !m-4 rounded-full'>
+                    <div className='w-25 bg-white !m-4 rounded-full'>
                         <img style={{ marginLeft: '0' }} src={botState} />
                     </div>
-                    <div className='flex items-center text-lg font-semibold w-40'>{polybotObj.name}</div>
+                    <div className='flex items-center font-semibold w-62'>{polybotObj.name}</div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'end', padding: '1em' }}>
                         <button
                             type="button"
@@ -162,12 +162,12 @@ const Chatbot = ({ handleClose }) => {
                 <div className="flex-1 !p-4 overflow-y-auto space-y-2 message-container" ref={messagesEndRef}>
                     {!messages.length && /*limit != 5 &&*/ (
                         <div className='assistant-init'>
-                            <p className='assistant-name'>¡Hola! ¿En qué puedo ayudarte hoy?</p>
+                            {/* <p className='assistant-name'>¡Hola! ¿En qué puedo ayudarte hoy?</p>
                             <div className='frequent-questions'>
                                 {frequent.map((message) => (
                                     <div onClick={() => makeQuestion(message)}><span>{message}</span></div>
                                 ))}
-                            </div>
+                            </div> */}
                             {/* <div className='limit-message'>
                                     Debes saber que tienes 5 preguntas disponibles diariamente.
                                 </div> */}

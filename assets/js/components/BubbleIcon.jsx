@@ -35,7 +35,9 @@ const BubbleIcon = () => {
           <motion.div
             whileHover={{ scale: 1.3 }}
             style={{
-              width: '20%'
+              width: '23%',
+              position: 'relative',
+              right: '55px'
             }}
           >
             <img src={polybotObj.avatar.default} style={{ marginLeft: '0' }} onClick={() => openChat()} />

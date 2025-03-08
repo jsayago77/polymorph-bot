@@ -82,7 +82,7 @@ class PublicBot {
             'messageUrl' => rest_url('polybot/v1/send-message')
         ));
 
-        return '<div id="polybot_chatbot"></div>';
+        echo '<div id="polybot_chatbot"></div>';
 
     }
 }
