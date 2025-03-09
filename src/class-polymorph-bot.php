@@ -29,8 +29,6 @@ class Polymorph_Bot
         $this->set_autoload();
         $this->init_hooks();
 
-        register_activation_hook(__FILE__, array($this, 'activate'));
-
         $admin = new Admin();
         $rest = new Rest_Routes();
         $chatbot = new PostType_Chatbot();
@@ -45,7 +43,6 @@ class Polymorph_Bot
             'post_content'  => '[polybot_general_page]',
             'post_status'   => 'publish',
             'post_author'   => 1,
-            'post_category' => array(1),
             'post_type'     => 'page'
         );
   
