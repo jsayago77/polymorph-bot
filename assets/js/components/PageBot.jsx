@@ -8,7 +8,7 @@ const errorBot = polybotObj.avatar.error;
 const writingBot = polybotObj.avatar.writing;
 const thinkBot = polybotObj.avatar.userWriting;
 
-const PageBot = ({ handleClose, handleAvatar }) => {
+const PageBot = ({ handleClose }) => {
     const messagesEndRef = useRef(null);
     const [messages, setMessages] = useState([]);
     const [thread, setThread] = useState('');
@@ -32,7 +32,6 @@ const PageBot = ({ handleClose, handleAvatar }) => {
         };
 
         setMessages([...messages, chatbotMessage]);
-
         if (currentMessage !== '') sendMessage();
     }, []);
 
@@ -79,7 +78,7 @@ const PageBot = ({ handleClose, handleAvatar }) => {
         setMessages([...messages, newMessage]);
         if (send_message.trim() !== '') {
             setLoading(true);
-            handleAvatar(writingBot);
+            setBotState(writingBot);
             try {
                 const response = await fetch(polybotObj.messageUrl, {
                     method: 'POST',
@@ -99,11 +98,11 @@ const PageBot = ({ handleClose, handleAvatar }) => {
                     };
 
                     setThread(resp.thread);
-                    handleAvatar(hiBot);
+                    setBotState(hiBot);
                     setLoading(false);
                     setMessages([...messages, newMessage, chatbotMessage]);
                 } else {
-                    handleAvatar(errorBot);
+                    setBotState(errorBot);
                     setLoading(false);
                     setMessages([...messages, newMessage, { id: messages.length + 1, text: '¡Ha ocurrido un error! Inténtalo de nuevo.', sender: 'assistant' }]);
                     throw new Error('Error al enviar el mensaje');
@@ -127,20 +126,27 @@ const PageBot = ({ handleClose, handleAvatar }) => {
         return messages.map((message) => (
             <div 
                 key={message.id} 
-                className={`my-2 p-2 rounded-md font-semibold text-white text-sm max-w-45 mb-0 ${message.sender === 'user' ? 'bg-blue-400 justify-self-end' : 'justify-self-start'}`}
+                className={`my-2 !p-2 rounded-md text-white font-semibold max-w-45 mb-0 ${message.sender === 'user' ? 'bg-blue-400 justify-self-end' : 'justify-self-start'}`}
                 style={message.sender !== 'user' ? { backgroundColor: polybotObj.color } : {}}>
                 <MarkdownRenderer markdown={message.text} />
             </div>
         ));
     };
 
+    const isMobile = () => {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
     return (
         <>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-            <div className="flex flex-col bg-white rounded-lg shadow-lg w-75 h-[300px]">
+            <div className="polybot-chatbot flex flex-col bg-white rounded-lg shadow-lg w-128 h-[500px] max-[400px]:w-screen max-[400px]:h-screen">
                 <div className="text-white rounded-t-lg flex justify-between" style={{ backgroundColor: polybotObj.color}}>
-                    <div className='flex items-center text-lg font-semibold w-40 px-4'>{polybotObj.name}</div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'end' }}>
+                    <div className='w-25 bg-white !m-4 rounded-full'>
+                        <img style={{ marginLeft: '0' }} src={botState} />
+                    </div>
+                    <div className='flex items-center font-semibold w-62'>{polybotObj.name}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'end', padding: '1em' }}>
                         <button
                             type="button"
                             onClick={() => handleCleanMessages()}
@@ -148,12 +154,15 @@ const PageBot = ({ handleClose, handleAvatar }) => {
                         >
                             <i className="fa-solid fa-broom"></i>
                         </button>
+                        <button type="button" onClick={() => {window.location.href = polybotObj.generalBotPage;} } className="option-button">
+                            <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                        </button>
                         <button type="button" onClick={() => handleClose()} className="option-button">
                             <i class="fa-solid fa-xmark fa-xl"></i>
                         </button>
                     </div>
                 </div>
-                <div className="flex-1 p-4 overflow-y-auto space-y-2" ref={messagesEndRef}>
+                <div className="flex-1 !p-4 overflow-y-auto space-y-2 message-container" ref={messagesEndRef}>
                     {!messages.length && /*limit != 5 &&*/ (
                         <div className='assistant-init'>
                             {/* <p className='assistant-name'>¡Hola! ¿En qué puedo ayudarte hoy?</p>
@@ -167,18 +176,18 @@ const PageBot = ({ handleClose, handleAvatar }) => {
                                 </div> */}
                         </div>
                     )}
-                    <div className="flex-1 p-2 overflow-y-auto space-y-2">
+                    <div className="flex-1 !p-4 overflow-y-auto space-y-2">
                         {renderMessages()}
                         {loading && (
                             <div>
                                 <Comment
                                     key={-1}
                                     visible={loading}
-                                    height="30"
-                                    width="35"
+                                    height="40"
+                                    width="50"
                                     ariaLabel="comment-loading"
                                     wrapperStyle={{ margin: "0", padding: "0", backgroundColor: polybotObj.color }}
-                                    wrapperClass="m-2 p-2 rounded-md text-white font-semibold w-fit"
+                                    wrapperClass="!m-2 !p-2 rounded-md text-white font-semibold w-fit"
                                     color="#ffffff"
                                     backgroundColor={polybotObj.color}
                                 />
@@ -195,8 +204,8 @@ const PageBot = ({ handleClose, handleAvatar }) => {
                             <input
                                 value={currentMessage}
                                 onChange={handleChange}
-                                onFocus={() => handleAvatar(thinkBot)}
-                                onBlur={() => handleAvatar(hiBot)}
+                                onFocus={() => setBotState(thinkBot)}
+                                onBlur={() => setBotState(hiBot)}
                                 placeholder="Escribe tu mensaje..."
                                 type="text"
                                 disabled={false /*limit == 5 ? true : false*/}
@@ -206,8 +215,8 @@ const PageBot = ({ handleClose, handleAvatar }) => {
                             <button
                                 type="submit"
                                 disabled={false /*limit == 5 ? true : false*/}
-                                onMouseEnter={() => handleAvatar(shokedBot)}
-                                onMouseLeave={() => handleAvatar(hiBot)}
+                                onMouseEnter={() => setBotState(shokedBot)}
+                                onMouseLeave={() => setBotState(hiBot)}
                                 className='send-button'
                             >
                                 <i className="fa-regular fa-paper-plane"></i>

@@ -26,6 +26,8 @@ class PublicBot {
     }
 
     public function add_footer(){ 
+
+        if(is_page('bots-general')) return;
         
         // Obtener los posts
         $posts = get_posts(array(
@@ -54,6 +56,7 @@ class PublicBot {
             'color' => get_post_meta($posts[0]->ID, 'polybot_color', true),
             'ui' => get_post_meta($posts[0]->ID, 'polybot_ui', true),
             'avatar' => $avatar,
+            'generalBotPage' => get_site_url('bots-general'),
             'messageUrl' => rest_url('polybot/v1/send-message')
         ));
 
