@@ -1,11 +1,18 @@
 <?php
 
-use Polymorph_Bot\Includes\Wrappers\DB;
-
 class Activator {
     public static function activate()
     {
-        self::create_tables();
+        $bots_general_page = array(
+            'post_title'    => 'Bots General',
+            'post_content'  => '[polybot_general_page]',
+            'post_status'   => 'publish',
+            'post_author'   => 1,
+            'post_category' => array(1),
+            'post_type'     => 'page'
+            );
+  
+            wp_insert_post( $bots_general_page );
     }
 
 /*     public static function get_models()
@@ -36,7 +43,7 @@ class Activator {
         }
     } */
 
-    public static function create_tables()
+  /*   public static function create_tables()
     {
         $tables = array(
             array(
@@ -55,5 +62,5 @@ class Activator {
         foreach($tables as $table){
             DB::create_table($table['name'],$table['args']);
         }
-    }
+    } */
 }

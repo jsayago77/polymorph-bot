@@ -129,7 +129,7 @@ class OpenAI_Bot
 
 			$status = $run['status'];
             $runId = $run['id'];
-            sleep(3);
+            sleep(2);
         }
 
         /* while ($status != "completed") {
