@@ -154,6 +154,9 @@ const Chatbot = ({ handleClose }) => {
                         >
                             <i className="fa-solid fa-broom"></i>
                         </button>
+                        <button type="button" onClick={() => {window.location.href = '/chat-gpt';} } className="option-button">
+                            <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                        </button>
                         <button type="button" onClick={() => handleClose()} className="option-button">
                             <i class="fa-solid fa-xmark fa-xl"></i>
                         </button>

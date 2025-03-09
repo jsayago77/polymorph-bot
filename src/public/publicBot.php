@@ -9,6 +9,7 @@ class PublicBot {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         add_action('wp_footer', array($this, 'add_footer'));
         add_shortcode('polybot_chatbot', array($this, 'bot_shcd'));
+        add_shortcode('polybot_general_page', array($this, 'general_bots_page_shcd'));
     }
 
     public function enqueue_scripts()
@@ -79,10 +80,37 @@ class PublicBot {
             'color' => get_post_meta($post->ID, 'polybot_color', true),
             'ui' => get_post_meta($post->ID, 'polybot_ui', true),
             'avatar' => $avatar,
+            'generalBotPage' => get_site_url('bots-general'),
             'messageUrl' => rest_url('polybot/v1/send-message')
         ));
 
         echo '<div id="polybot_chatbot"></div>';
+    }
 
+    public function general_bots_page_shcd()
+    {
+        $posts = get_posts(array(
+            'post_type'      => 'polybot-chatbot',
+            'posts_per_page' => -1,
+            //'fields'         => 'ids, post_title',
+        ));
+
+        $avatar = get_post_meta($posts[0]->ID, 'polybot_avatar', true);
+
+        foreach($avatar as $key => $val){
+            $avatar[$key] = wp_get_attachment_url($avatar[$key]);
+        }
+
+        wp_localize_script('polybot-chatbot', 'polybotObj', array(
+            'botID' => $posts[0]->ID,
+            'name' => $posts[0]->post_title,
+            'color' => get_post_meta($posts[0]->ID, 'polybot_color', true),
+            'ui' => 'page',
+            'avatar' => $avatar,
+            'generalPage' => get_site_url(),
+            'messageUrl' => rest_url('polybot/v1/send-message')
+        ));
+
+        echo '<div id="polybot_chatbot"></div>';
     }
 }

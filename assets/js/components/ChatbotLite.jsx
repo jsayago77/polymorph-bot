@@ -156,12 +156,12 @@ const ChatbotLite = ({ handleClose, handleAvatar }) => {
                 <div className="flex-1 p-4 overflow-y-auto space-y-2" ref={messagesEndRef}>
                     {!messages.length && /*limit != 5 &&*/ (
                         <div className='assistant-init'>
-                            <p className='assistant-name'>¡Hola! ¿En qué puedo ayudarte hoy?</p>
+                            {/* <p className='assistant-name'>¡Hola! ¿En qué puedo ayudarte hoy?</p>
                             <div className='frequent-questions'>
                                 {frequent.map((message) => (
                                     <div onClick={() => makeQuestion(message)}><span>{message}</span></div>
                                 ))}
-                            </div>
+                            </div> */}
                             {/* <div className='limit-message'>
                                     Debes saber que tienes 5 preguntas disponibles diariamente.
                                 </div> */}

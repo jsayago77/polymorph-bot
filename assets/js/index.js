@@ -2,6 +2,7 @@ import domReady from '@wordpress/dom-ready';
 import BubbleIcon from './components/BubbleIcon';
 import VerticalIcon from './components/VerticalIcon';
 import AnimatedIcon from './components/AnimatedIcon';
+import PageBot from './components/PageBot';
 import { createRoot } from '@wordpress/element';
 import '../css/index.css';
 
@@ -22,6 +23,9 @@ domReady( () => {
             break;
         case 'bubble':
             shortcode_root.render( <BubbleIcon /> );
+            break;
+        case 'page':
+            shortcode_root.render( <PageBot /> );
             break;
     }
         
