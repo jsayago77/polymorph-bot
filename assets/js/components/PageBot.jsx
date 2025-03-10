@@ -145,7 +145,7 @@ const PageBot = ({ handleClose }) => {
                     <div className='w-25 bg-white !m-4 rounded-full'>
                         <img style={{ marginLeft: '0' }} src={botState} />
                     </div>
-                    <div className='flex-1 items-center font-semibold w-62'>{polybotObj.name}</div>
+                    <div className='flex-1 items-center content-center font-semibold w-62'>{polybotObj.name}</div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'end', padding: '1em' }}>
                         <button
                             type="button"

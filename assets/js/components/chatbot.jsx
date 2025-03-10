@@ -126,7 +126,7 @@ const Chatbot = ({ handleClose }) => {
         return messages.map((message) => (
             <div 
                 key={message.id} 
-                className={`my-2 !p-2 rounded-md text-white font-semibold max-w-45 mb-0 ${message.sender === 'user' ? 'bg-blue-400 justify-self-end' : 'justify-self-start'}`}
+                className={`my-2 !p-2 rounded-md text-white font-semibold max-w-60 mb-0 ${message.sender === 'user' ? 'bg-blue-400 justify-self-end' : 'justify-self-start'}`}
                 style={message.sender !== 'user' ? { backgroundColor: polybotObj.color } : {}}>
                 <MarkdownRenderer markdown={message.text} />
             </div>
