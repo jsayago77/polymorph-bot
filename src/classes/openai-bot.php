@@ -29,7 +29,6 @@ class OpenAI_Bot
         $url = $this->apiUrl . "/threads/{$this->threadId}/messages/{$messageId}";
 
         return $this->makeRequest($url, null);
-
     }
 
     public function listMessages($params)
@@ -52,7 +51,7 @@ class OpenAI_Bot
     public function retrieveRun($runId)
     {
         $url = $this->apiUrl . "/threads/{$this->threadId}/runs/{$runId}";
-		
+
         return $this->makeRequest($url, null, 'GET');
     }
 
@@ -70,26 +69,25 @@ class OpenAI_Bot
         ];
 
         return $this->makeRequest($url, $data);
-
     }
 
     private function makeRequest($url, $data, $method = 'POST')
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		
-		if($method == 'POST')
-        	curl_setopt($ch, CURLOPT_POST, true);
+
+        if ($method == 'POST')
+            curl_setopt($ch, CURLOPT_POST, true);
 
         if ($method == 'POST' && !empty($data))
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-			
-		if ($method == 'GET' && !empty($data)) {
-			$queryString = http_build_query($data);
-			$url .= '?' . $queryString;
-		}
-		
-		curl_setopt($ch, CURLOPT_URL, $url);
+
+        if ($method == 'GET' && !empty($data)) {
+            $queryString = http_build_query($data);
+            $url .= '?' . $queryString;
+        }
+
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
             'Authorization: Bearer ' . $this->apiKey,
@@ -98,20 +96,20 @@ class OpenAI_Bot
 
         $response = curl_exec($ch);
         curl_close($ch);
-		
-		$decoded = json_decode($response, true);
-		if (json_last_error() !== JSON_ERROR_NONE) {
-			//error_log(print_r(array('error' => 'Invalid JSON', 'url' => $url, 'fields' => $data),true));
-		}
+
+        $decoded = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            //error_log(print_r(array('error' => 'Invalid JSON', 'url' => $url, 'fields' => $data),true));
+        }
 
         return $decoded;
     }
 
     public function sendMessageGeneral($prompt)
     {
-		$runId = '';
-		$status = '';
-        if($this->threadId) {
+        $runId = '';
+        $status = '';
+        if ($this->threadId) {
             $this->sendMessage($prompt);
             $resp = $this->createRun();
             $status = $resp['status'];
@@ -121,18 +119,17 @@ class OpenAI_Bot
             $this->threadId = $resp['thread_id'];
             $status = $resp['status'];
             $runId = $resp['id'];
-			
         }
 
-        while( $status == "queued" || $status == "in-progress"){
+        while ($status == "queued" || $status == "in-progress") {
             $run = $this->retrieveRun($runId);
 
-			$status = $run['status'];
+            $status = $run['status'];
             $runId = $run['id'];
             sleep(2);
         }
 
-        if($status == 'completed'){
+        if ($status == 'completed') {
             $assistant_message = $this->listMessages([
                 'order' => 'desc',
                 'limit' => 1
@@ -149,12 +146,106 @@ class OpenAI_Bot
                 ];
 
                 return $response;
-
             } else {
-                
+
                 return 'No assistant message found.';
             }
+        }
+    }
 
+
+
+
+
+
+
+    public function send_chat_message($prompt)
+    {
+        $api_key = $this->apiKey;
+        $assistant_id = $this->assistantId;
+
+        if (empty($api_key) || empty($assistant_id)) {
+            wp_send_json_error('API key or Assistant ID missing.', 400);
+            return;
+        }
+
+        $thread_id = $this->threadId;
+        $message = $prompt;
+
+        if (empty($message)) {
+            wp_send_json_error('Message is required.', 400);
+            return;
+        }
+
+        try {
+            $client = \OpenAI::client($api_key);
+
+            if (!empty($thread_id)) {
+                $thread = $client->threads()->messages()->create($thread_id, [
+                    'role' => 'user',
+                    'content' => $message
+                ]);
+
+                $thread = $client->threads()->runs()->create(
+                    threadId: $thread->threadId,
+                    parameters: [
+                        'assistant_id' => $assistant_id,
+                    ],
+                );
+            } else {
+                $thread = $client->threads()->createAndRun([
+                    'assistant_id' => $assistant_id,
+                    'thread' => [
+                        'messages' => [
+                            [
+                                'role' => 'user',
+                                'content' => $message
+                            ],
+                        ],
+                    ],
+                ]);
+
+                $this->threadId = $thread->threadId;
+            }
+
+            $response_status = $thread->status;
+            while ($response_status == "queued" || $response_status == "in_progress") {
+                $run = $client->threads()->runs()->retrieve($thread->threadId, $thread->id);
+
+                $response_status = $run->status;
+                sleep(1);
+            }
+
+            if ($response_status == 'completed') {
+                $assistant_message = $client->threads()->messages()->list($thread->threadId, [
+                    'order' => 'desc',
+                    'limit' => 1
+                ]);
+
+                if (!empty($assistant_message->data)) {
+
+                    $message = $assistant_message->data[0]->content[0]->text->value ?? '';
+                    $message = preg_replace("/【\d+:\d+†source】/", "", $message);
+
+                    $response = [
+                        'msg' => $message,
+                        'thread' => $this->threadId
+                    ];
+
+                    wp_send_json($response);
+                    
+                    return;
+                } else {
+                    wp_send_json_error('No assistant message found.', 500);
+                    return;
+                }
+            } else {
+                wp_send_json_error('Message processing did not complete.', 500);
+                return;
+            }
+        } catch (\Exception $e) {
+            wp_send_json_error($e->getMessage(), 500);
+            return;
         }
     }
 }

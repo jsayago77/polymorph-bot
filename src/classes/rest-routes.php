@@ -33,7 +33,7 @@ class Rest_Routes {
             $bot = new OpenAI_Bot($keys['openai_key'], $assist_id, $thread);
 
             $message = $request->get_param('message');
-            $bot_response = $bot->sendMessageGeneral($message);
+            $bot_response = $bot->send_chat_message($message);
 
             wp_send_json($bot_response);
         }
