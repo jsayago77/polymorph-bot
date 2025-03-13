@@ -132,14 +132,6 @@ class OpenAI_Bot
             sleep(2);
         }
 
-        /* while ($status != "completed") {
-
-            if($status == "queued") sleep(0.3);
-            elseif($status == "in-progress"){
-                
-            }
-        } */
-
         if($status == 'completed'){
             $assistant_message = $this->listMessages([
                 'order' => 'desc',

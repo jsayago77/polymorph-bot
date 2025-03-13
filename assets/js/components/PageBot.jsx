@@ -157,9 +157,6 @@ const PageBot = ({ handleClose }) => {
                         <button type="button" onClick={() => {window.location.href = polybotObj.generalBotPage;} } className="option-button">
                             <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
                         </button>
-                        <button type="button" onClick={() => handleClose()} className="option-button">
-                            <i class="fa-solid fa-xmark fa-xl"></i>
-                        </button>
                     </div>
                 </div>
                 <div className="flex-1 !p-4 overflow-y-auto space-y-2 message-container" ref={messagesEndRef}>
