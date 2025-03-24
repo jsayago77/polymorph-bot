@@ -21,6 +21,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+include_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+
 define( 'POLYMORPH_BOT_VERSION', '1.0.0' );
 
 function run_polymorph_bot() {
