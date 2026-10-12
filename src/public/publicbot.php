@@ -56,7 +56,7 @@ class PublicBot {
             'color' => get_post_meta($posts[0]->ID, 'polybot_color', true),
             'ui' => get_post_meta($posts[0]->ID, 'polybot_ui', true),
             'avatar' => $avatar,
-            'generalBotPage' => 'https://example.com/chatbot',
+            'generalBotPage' => home_url('/'),
             'messageUrl' => rest_url('polybot/v1/send-message')
         ));
 
@@ -83,7 +83,7 @@ class PublicBot {
             'color' => get_post_meta($post->ID, 'polybot_color', true),
             'ui' => get_post_meta($post->ID, 'polybot_ui', true),
             'avatar' => $avatar,
-            'generalBotPage' => get_site_url('chatbot'),
+            'generalBotPage' => home_url('/'),
             'messageUrl' => rest_url('polybot/v1/send-message')
         ));
 
@@ -110,7 +110,7 @@ class PublicBot {
             'color' => get_post_meta($posts[0]->ID, 'polybot_color', true),
             'ui' => 'page',
             'avatar' => $avatar,
-            'generalBotPage' => 'https://example.com',
+            'generalBotPage' => home_url('/'),
             'messageUrl' => rest_url('polybot/v1/send-message')
         ));
 

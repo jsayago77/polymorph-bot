@@ -2,17 +2,17 @@
 
 /**
  *
- * @link              https://example.com
+ * @link              https://github.com/jsayago77
  * @since             1.0.0
  * @package           polymorph_bot
  *
  * @wordpress-plugin
  * Plugin Name:       Polymorph Bot
- * Plugin URI:        https://example.com
+ * Plugin URI:        https://github.com/jsayago77/polymorph-bot
  * Description:       Un bot que se adapta y cambia de forma según las configuraciones.
  * Version:           1.0.0
  * Author:            Jose Sayago
- * Author URI:        https://example.com/
+ * Author URI:        https://github.com/jsayago77/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       polymorph_bot

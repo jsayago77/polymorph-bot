@@ -16,9 +16,9 @@ const PageBot = ({ handleClose }) => {
     const [loading, setLoading] = useState(false);
     const [limit, setLimit] = useState(0);
     const [frequent, setFrequent] = useState([
-        '¿Qué es Example?',
-        '¿Qué cursos ofrece Example?',
-        'Ayúdame con el material de un curso...'
+        '¿Qué es este sitio?',
+        '¿Qué servicios ofrecen?',
+        'Ayúdame a resolver una duda'
     ]);
     const [sendQ, setSendQ] = useState(false);
 

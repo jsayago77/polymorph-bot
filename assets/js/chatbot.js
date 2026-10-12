@@ -8,7 +8,7 @@ class ChatBot extends HTMLElement {
 
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = 'http://localhost/example-site/wp-content/plugins/polymorph-bot/assets/public/output.css';
+        link.href = 'assets/public/output.css';
         this.shadowRoot.appendChild(link);
 
         const fa = document.createElement('link');
