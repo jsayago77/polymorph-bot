@@ -225,7 +225,7 @@ class OpenAI_Bot
                 if (!empty($assistant_message->data)) {
 
                     $message = $assistant_message->data[0]->content[0]->text->value ?? '';
-                    $message = preg_replace("/【\d+:\d+†source】/", "", $message);
+                    $message = preg_replace("/【\d+:\d+†[^】]+】/", "", $message);
 
                     $response = [
                         'msg' => $message,
